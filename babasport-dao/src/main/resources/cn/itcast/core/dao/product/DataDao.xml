@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itcast.core.dao.product.DataDao" >
+  <resultMap id="BaseResultMap" type="cn.itcast.core.bean.product.Data" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="option_name" property="optionName" jdbcType="VARCHAR" />
+    <result column="option_level" property="optionLevel" jdbcType="BIGINT" />
+    <result column="isShow" property="isshow" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    <if test="fields == null" >
+      id, option_name, option_level, isShow
+    </if>
+    <if test="fields != null" >
+      ${fields}
+    </if>
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.itcast.core.bean.product.DataQuery" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from bbs_data
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startRow != null" >
+      limit #{startRow} , #{pageSize}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    id,option_name,option_level,isShow
+    from bbs_data
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from bbs_data
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.itcast.core.bean.product.DataQuery" >
+    delete from bbs_data
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.itcast.core.bean.product.Data" >
+    insert into bbs_data (id, option_name, option_level, 
+      isShow)
+    values (#{id,jdbcType=BIGINT}, #{optionName,jdbcType=VARCHAR}, #{optionLevel,jdbcType=BIGINT}, 
+      #{isshow,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.itcast.core.bean.product.Data" >
+    insert into bbs_data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="optionName != null" >
+        option_name,
+      </if>
+      <if test="optionLevel != null" >
+        option_level,
+      </if>
+      <if test="isshow != null" >
+        isShow,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="optionName != null" >
+        #{optionName,jdbcType=VARCHAR},
+      </if>
+      <if test="optionLevel != null" >
+        #{optionLevel,jdbcType=BIGINT},
+      </if>
+      <if test="isshow != null" >
+        #{isshow,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.itcast.core.bean.product.DataQuery" resultType="java.lang.Integer" >
+    select count(*) from bbs_data
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update bbs_data
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.optionName != null" >
+        option_name = #{record.optionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.optionLevel != null" >
+        option_level = #{record.optionLevel,jdbcType=BIGINT},
+      </if>
+      <if test="record.isshow != null" >
+        isShow = #{record.isshow,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update bbs_data
+    set id = #{record.id,jdbcType=BIGINT},
+      option_name = #{record.optionName,jdbcType=VARCHAR},
+      option_level = #{record.optionLevel,jdbcType=BIGINT},
+      isShow = #{record.isshow,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.itcast.core.bean.product.Data" >
+    update bbs_data
+    <set >
+      <if test="optionName != null" >
+        option_name = #{optionName,jdbcType=VARCHAR},
+      </if>
+      <if test="optionLevel != null" >
+        option_level = #{optionLevel,jdbcType=BIGINT},
+      </if>
+      <if test="isshow != null" >
+        isShow = #{isshow,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.itcast.core.bean.product.Data" >
+    update bbs_data
+    set option_name = #{optionName,jdbcType=VARCHAR},
+      option_level = #{optionLevel,jdbcType=BIGINT},
+      isShow = #{isshow,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!-- 批量删除 (1,2,3,4),如果传如的是list类型则parameterType="List" -->
+	<delete id="deletes" parameterType="Long">
+		delete from bbs_data
+		<where>
+			id in
+			<foreach collection="array" item="id" separator="," open="("
+				close=")">
+				#{id}
+			</foreach>
+		</where>
+	</delete>
+</mapper>

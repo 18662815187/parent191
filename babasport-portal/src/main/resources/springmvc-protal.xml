@@ -1,0 +1,62 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/task
+   		http://www.springframework.org/schema/task/spring-task-4.0.xsd
+		http://code.alibabatech.com/schema/dubbo        
+		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 扫描@Controler -->
+	<context:component-scan base-package="cn.itcast" />
+	<!-- 静态资源放行 -->
+	<!-- spring3.0.5以上版本支持<mvc:default-servlet-handler/>就可以放行，低版本必须如下写法 <mvc:resources 
+		mapping="/js/**" location="/js/" /> -->
+	<mvc:default-servlet-handler />
+	<!-- 处理器 映射器 适配器 -->
+	<!-- <mvc:annotation-driven/> -->
+	<!-- spring MVC JSON配置 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="false">
+			<bean id="jsonConverter"
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes" value="text/html;charset=UTF-8" /><!-- 
+					避免出现IE下载json的情况 -->
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<!-- 视图解析器jsp 此处的id只是一个标记命名作用没有实际应用 -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/portal/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- Springmvc拦截器 -->
+	<mvc:interceptors>
+		<!-- 多个拦截器 -->
+		<mvc:interceptor>
+			<!-- 拦截器的规则   /buyer/** -->
+			<mvc:mapping path="/buyer/**"/>
+			<!-- 拦截到自定义的类中处理 -->
+			<bean class="cn.itcast.core.interceptor.CustomInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<!-- 图片上传,id内的小名是固定不能修改的,是一个接口 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 此处是设置图片尺寸的，此次开发暂时不做限制 -->
+	</bean>
+	<import resource="dubbo-consumer.xml" />
+
+</beans>
